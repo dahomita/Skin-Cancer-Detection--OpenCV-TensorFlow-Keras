@@ -1,10 +1,10 @@
 import os
 import numpy as np
 import cv2
-from keras.preprocessing.image import ImageDataGenerator
-from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
-from keras.layers import BatchNormalization
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.layers import BatchNormalization
 
 # Set path to the data folder
 data_dir = 'Skin_Data'
