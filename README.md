@@ -1,6 +1,10 @@
-# Skin Cancer Detection Model
+# Skin Cancer Detection API
 
-This repository contains Python code for generating a skin cancer detection model and using it to detect skin cancer from user-inputted images or videos. The model architecture is as follows:
+This repository contains a FastAPI implementation for skin cancer detection using a pre-trained TensorFlow/Keras model. The API accepts image uploads and returns predictions indicating whether the skin lesion in the image is cancerous or non-cancerous.
+
+## Model Architecture
+
+The system uses a CNN model with the following architecture:
 
 ```python
 model = Sequential()
@@ -21,58 +25,88 @@ model.add(Dense(1, activation='sigmoid'))
 
 ## Dataset
 
-The dataset used for training and evaluation can be downloaded from Kaggle: [Skin Cancer Binary Classification Dataset](https://www.kaggle.com/datasets/kylegraupe/skin-cancer-binary-classification-dataset). It provides labeled images for binary classification of skin cancer.
+The model was trained on the Skin Cancer Binary Classification Dataset from Kaggle: [Skin Cancer Binary Classification Dataset](https://www.kaggle.com/datasets/kylegraupe/skin-cancer-binary-classification-dataset).
 
 ## Dependencies
 
-To run the code in this repository, you'll need the following dependencies:
+To run the API, install the required dependencies:
 
-- Python 3.x
+```shell
+pip install -r requirements.txt
+```
+
+Key dependencies include:
+- FastAPI
+- Uvicorn
 - TensorFlow
-- Keras
-- NumPy
 - OpenCV
+- NumPy
+- Python-multipart
 
-You can install the required packages using `pip`:
+## API Usage
 
-```shell
-pip install tensorflow keras numpy opencv-python
-```
-
-## Usage
-
-1. Clone this repository to your local machine:
+### Running the API Server
 
 ```shell
-git clone https://github.com/your-username/your-repository.git
-cd your-repository
+python main.py
 ```
 
-2. Download the Skin Cancer Binary Classification Dataset from the provided link and place it in the appropriate directory.
+This starts the API server on `http://0.0.0.0:8000`.
 
-3. Use the provided code to train the skin cancer detection model.
+### API Endpoints
 
-4. Run the script to detect skin cancer from an image:
+#### POST /predict
 
-```shell
-python predict_image.py --image path/to/your/image.jpg
+Upload an image for skin cancer detection.
+
+**Request:**
+- Form data with a file upload named 'file'
+- Supported image formats: JPG, JPEG, PNG
+
+**Response:**
+JSON object with the following fields:
+- `pred_label`: "Cancer" or "Not Cancer"
+- `pred_prob`: Probability value between 0 and 1 (rounded to 2 decimal places)
+
+Example response:
+```json
+{
+  "pred_label": "Not Cancer",
+  "pred_prob": 0.15
+}
 ```
 
-5. Run the script to detect skin cancer from a video:
+### Testing the API
 
-```shell
-python predict_video.py --video path/to/your/video.mp4
+You can test the API using tools like cURL, Postman, or with Python:
+
+```python
+import requests
+
+url = "http://localhost:8000/predict"
+files = {"file": open("path/to/skin_image.jpg", "rb")}
+response = requests.post(url, files=files)
+result = response.json()
+print(result)
 ```
 
-Make sure to replace `path/to/your/image.jpg` and `path/to/your/video.mp4` with the actual paths to your desired image and video files, respectively.
+## Deployment
 
-## Results
+The API can be deployed to various platforms:
 
-The skin cancer detection model, trained on the Skin Cancer Binary Classification Dataset, can accurately classify skin cancer from images and videos. You can modify the code and experiment with different architectures or hyperparameters to potentially improve the performance.
+1. Cloud services:
+   - Heroku
+   - AWS (EC2, Elastic Beanstalk)
+   - Google Cloud Run
+   - Azure App Service
+
+2. Self-hosting:
+   - Docker container
+   - Virtual private server
 
 ## Acknowledgments
 
-- The Skin Cancer Binary Classification Dataset used in this project was sourced from Kaggle: [Skin Cancer Binary Classification Dataset](https://www.kaggle.com/datasets/kylegraupe/skin-cancer-binary-classification-dataset).
+- The Skin Cancer Binary Classification Dataset used in this project: [Kaggle](https://www.kaggle.com/datasets/kylegraupe/skin-cancer-binary-classification-dataset).
 
 ## License
 
